@@ -10,14 +10,9 @@ window.onload=function(){
     let right=document.querySelector('.banner_right');
     let ce=document.querySelectorAll('.cexxk li');
     let ce1=document.querySelectorAll('.banner_nav li');
-    let boxe=document.querySelector('.apple');
-    let nrLunbo=document.querySelectorAll('.apple li');
-    let width=parseInt(getComputedStyle(boxe,null)['width']);
-    let dian=document.querySelectorAll('.neirong_button li');
-    let left1=document.querySelector('.n-d-l');
-    let right1=document.querySelector('.n-d-r');
     let now=0;
     let next=0;
+    let flag=true;
     xxx1.forEach(function(val,index){
         val.onmouseover=function(){
             xxx1.forEach(function(val,index){
@@ -91,31 +86,83 @@ window.onload=function(){
             ban[index].classList.add('active');
         }
     })
+
+
+
+    let boxe=document.querySelector('.apple');
+    let width=parseInt(getComputedStyle(boxe).width);
+    let left4=document.querySelector('.n-d-l');
+    let nrLunbo=document.querySelectorAll('.apple li');
+    let right4=document.querySelector('.n-d-r');
+    let dian=document.querySelectorAll('.neirong_button li');
     function movee(){
+        if(!flag){
+            return;
+        }
+        flag=false;
         next=now+1;
         if(next>nrLunbo.length-1){
             next=0;
         }
         nrLunbo[next].style.left=width+'px';
-        animate(nrLunbo[now],{left:-width});
+        animate(nrLunbo[now],{left:-width},function(){
+            flag=true;
+        });
         dian[now].classList.remove('active');
         animate(nrLunbo[next],{left:0});
         dian[next].classList.add('active');
         now=next;
     }
-    right1.onclick=function(){
+    right4.onclick=function(){
         movee();
     }
-    left1.onclick=function(){
+    left4.onclick=function(){
+        if(!flag){
+            return;
+        }
+        flag=false;
         next=now-1;
         if(next<0){
             next=nrLunbo.length-1;
         }
         nrLunbo[next].style.left=-width+'px';
-        animate(nrLunbo[now],{left:width});
+        animate(nrLunbo[now],{left:width},function(){
+            flag=true;
+        });
         dian[now].classList.remove('active');
         animate(nrLunbo[next],{left:0});
         dian[next].classList.add('active');
         now=next;
     }
+    dian.forEach(function(val,index){
+        val.onclick=function(){
+            if(!flag){
+                return
+            }
+            flag=false;
+            if(index>now){
+                next=index;
+                nrLunbo[next].style.left=width+'px';
+                animate(nrLunbo[now],{left:-width},function(){
+                    flag=true;
+                });
+                dian[now].classList.remove('active');
+                animate(nrLunbo[next],{left:0});
+                dian[next].classList.add('active');
+                now=next;
+            }else if(index<now){
+                next=index;
+                nrLunbo[next].style.left=-width+'px';
+                animate(nrLunbo[now],{left:width},function(){
+                    flag=true;
+                });
+                animate(nrLunbo[next],{left:0});
+                dian[now].classList.remove('active');
+                dian[next].classList.add('active');
+                now=next;
+            }else{
+                flag=true;
+            }
+        }
+    })
 }
